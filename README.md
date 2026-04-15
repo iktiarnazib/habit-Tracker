@@ -19,3 +19,4 @@ samples, guidance on mobile development, and a full API reference.
 # habit-Tracker
 # SharedPreference-riverpod-dark-light-mode
 # noflickerdarkmode
+# noflickerdarkmode
