@@ -1,13 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habittracker/theme/dark_mode.dart';
+import 'package:habittracker/theme/light_mode.dart';
 import 'package:habittracker/theme/theme_provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsPage extends ConsumerWidget {
   const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final themeMode = ref.watch(themeProvider.notifier).isDarkMode;
+    //theme mode checker
+    final darkThemeReader = ref.watch(themeProvider);
+
+    //isDarkMode
+    final darkModeOn = (darkThemeReader == darkMode);
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
@@ -26,12 +34,12 @@ class SettingsPage extends ConsumerWidget {
               color: Theme.of(context).colorScheme.secondary,
             ),
             padding: EdgeInsets.all(12),
-            margin: EdgeInsets.all(12),
+            margin: EdgeInsets.only(left: 25, right: 25, bottom: 10, top: 10),
             child: ListTile(
               title: Text('Dark Mode'),
               trailing: Switch(
                 hoverColor: Colors.green,
-                value: themeMode,
+                value: darkModeOn,
                 onChanged: (value) {
                   ref.read(themeProvider.notifier).toggleTheme();
                 },

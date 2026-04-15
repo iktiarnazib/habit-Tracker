@@ -2,22 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:habittracker/theme/dark_mode.dart';
 import 'package:habittracker/theme/light_mode.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 part 'theme_provider.g.dart';
 
 @riverpod
 class ThemeNotifier extends _$ThemeNotifier {
   @override
-  ThemeData build() => lightMode; //initial mode
+  ThemeData build() {
+    return lightMode;
+  }
 
-  //is currnent theme dark mode?
-  bool get isDarkMode => state == darkMode;
+  //read data
+  Future<void> loadTheme() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool isDark = prefs.getBool('isDark') ?? false;
+    state = isDark ? darkMode : lightMode;
+  }
 
-  void toggleTheme() {
-    if (state == darkMode) {
-      state = lightMode;
-    } else {
-      state = darkMode;
-    }
+  //change theme
+  void toggleTheme() async {
+    state = (state == darkMode) ? lightMode : darkMode;
+
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isDark', state == darkMode);
   }
 }
