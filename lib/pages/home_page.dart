@@ -22,6 +22,8 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
         ],
       ),
+      drawer: Drawer(),
+      body: Column(),
     );
   }
 }
