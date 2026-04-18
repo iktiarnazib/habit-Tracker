@@ -1,4 +1,3 @@
-import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habittracker/database/app_database.dart';
 import 'package:habittracker/providers/database_provider.dart';
