@@ -30,6 +30,13 @@ class HabitNotifier extends AsyncNotifier<List<Habit>> {
     }
   }
 
+  // Get first launch date (for heatmap)
+  Future<DateTime?> getFirstLaunchDate() async {
+    final db = ref.read(databaseProvider);
+    final settings = await db.select(db.appSettings).getSingleOrNull();
+    return settings?.firstLaunchDate;
+  }
+
   //add habit
   Future<void> addHabit(String name) async {
     final db = ref.read(databaseProvider);
