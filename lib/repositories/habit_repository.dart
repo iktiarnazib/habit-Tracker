@@ -1,3 +1,4 @@
+import 'package:drift/drift.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habittracker/database/app_database.dart';
 import 'package:habittracker/providers/database_provider.dart';
@@ -8,6 +9,25 @@ class HabitNotifier extends AsyncNotifier<List<Habit>> {
   Future<List<Habit>> build() async {
     final db = ref.watch(databaseProvider);
     return db.select(db.habits).get();
+  }
+
+  // Save first launch date (call this once on app startup)
+  Future<void> initFirstLaunchDate() async {
+    final db = ref.read(databaseProvider);
+    final settings = await db.select(db.appSettings).getSingleOrNull();
+
+    // only set it if it hasn't been set before
+    if (settings == null) {
+      await db
+          .into(db.appSettings)
+          .insert(
+            AppSettingsCompanion.insert(
+              firstLaunchDate: Value(
+                DateTime.now(),
+              ), // ✅ no ! and wrapped in Value()
+            ),
+          );
+    }
   }
 
   //add habit
