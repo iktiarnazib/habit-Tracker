@@ -113,6 +113,16 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
+  //Edit Database
+  void onEditTap(int id, String newName) {
+    ref.read(habitNotifierProvider.notifier).updateHabitName(id, newName);
+  }
+
+  //delete from Database
+  void onDeleteTap(int id) {
+    ref.read(habitNotifierProvider.notifier).deleteHabit(id);
+  }
+
   Widget? _buildHabitList() {
     //habit database current stored habits
     final habitsAsync = ref.watch(habitNotifierProvider);
@@ -134,6 +144,8 @@ class _HomePageState extends ConsumerState<HomePage> {
               habit: habit.name,
               isCompleted: isCompletedToday,
               onChanged: (value) => onCompletedChanged(value, habit),
+              onEditTap: () => onEditTap(habit.id, habit.name),
+              onDeleteTap: () => onDeleteTap(habit.id),
             );
           },
         );

@@ -1,14 +1,20 @@
 import 'package:flutter/material.dart';
+import 'package:habittracker/components/my_pop_up_settings.dart';
+import 'package:popover/popover.dart';
 
 class MyHabitTile extends StatelessWidget {
   final String habit;
   final bool isCompleted;
   final void Function(bool?)? onChanged;
+  final void Function()? onEditTap;
+  final void Function()? onDeleteTap;
   const MyHabitTile({
     super.key,
     required this.habit,
     required this.isCompleted,
     required this.onChanged,
+    required this.onEditTap,
+    required this.onDeleteTap,
   });
 
   @override
@@ -38,6 +44,30 @@ class MyHabitTile extends StatelessWidget {
           title: Text(
             habit,
             style: TextStyle(color: isCompleted ? Colors.white : Colors.black),
+          ),
+          trailing: Builder(
+            builder: (context) {
+              return IconButton(
+                onPressed: () {
+                  showPopover(
+                    height: 100,
+                    width: 100,
+                    backgroundColor: Theme.of(context).colorScheme.surface,
+                    context: context,
+                    bodyBuilder: (context) {
+                      return MyPopUpSettings(
+                        onEditTap: onEditTap,
+                        onDeleteTap: onDeleteTap,
+                      );
+                    },
+                  );
+                },
+                icon: Icon(
+                  Icons.more_vert,
+                  color: isCompleted ? Colors.white : Colors.black,
+                ),
+              );
+            },
           ),
         ),
       ),
