@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habittracker/components/my_drawer.dart';
+import 'package:habittracker/components/my_habit_tile.dart';
+import 'package:habittracker/database/app_database.dart';
 import 'package:habittracker/providers/database_provider.dart';
 import 'package:habittracker/repositories/habit_repository.dart';
+import 'package:habittracker/util/habit_util.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -78,6 +81,15 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
+  //on Completed Changed setting value for listTiles
+  void onCompletedChanged(bool? value, Habit habit) {
+    if (value != null) {
+      ref
+          .read(habitNotifierProvider.notifier)
+          .updateCompletionStatus(habit, value);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -110,9 +122,19 @@ class _HomePageState extends ConsumerState<HomePage> {
         return ListView.builder(
           itemCount: habitList.length,
           itemBuilder: (BuildContext context, int index) {
+            //check individual habits
             final habit = habitList[index];
 
-            return ListTile(title: Text(habit.name));
+            //checking if the habit is completed today
+            bool isCompletedToday = isTheHabitCompletedToday(
+              habit.completedDays,
+            );
+
+            return MyHabitTile(
+              habit: habit.name,
+              isCompleted: isCompletedToday,
+              onChanged: (value) => onCompletedChanged(value, habit),
+            );
           },
         );
       },
