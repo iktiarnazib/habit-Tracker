@@ -16,6 +16,7 @@ class HomePage extends ConsumerStatefulWidget {
 
 class _HomePageState extends ConsumerState<HomePage> {
   TextEditingController textController = TextEditingController();
+  TextEditingController updateTextController = TextEditingController();
   String errorText = '';
   void createNewHabit() {
     showDialog(
@@ -90,6 +91,78 @@ class _HomePageState extends ConsumerState<HomePage> {
     }
   }
 
+  //Edit Database
+  void onEditTap(int id, String name) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, setState) {
+            updateTextController.text = name;
+            return AlertDialog(
+              title: const Text('Edit Your Habit'),
+
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  TextFormField(
+                    controller: updateTextController,
+                    decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      hint: Text('Update your habit'),
+                    ),
+                  ),
+                  Text(errorText, style: TextStyle(color: Colors.red)),
+                ],
+              ),
+              actions: [
+                //cancel button
+                MaterialButton(
+                  onPressed: () {
+                    //pop the page
+                    Navigator.pop(context);
+                    //clear the text
+                    textController.clear();
+                  },
+                  child: const Text('Cancel'),
+                ),
+                //save button
+                MaterialButton(
+                  onPressed: () {
+                    if (updateTextController.text.isNotEmpty) {
+                      //get the new habit name
+                      final updatedHabit = updateTextController.text;
+                      //save it to database
+                      ref
+                          .read(habitNotifierProvider.notifier)
+                          .updateHabitName(id, updatedHabit);
+                      //pop the page
+                      Navigator.pop(context);
+                      //clear text
+                      textController.clear();
+                      errorText = '';
+                    } else {
+                      errorText = 'Please enter a Habit';
+                      setState(() {});
+                    }
+                  },
+                  child: const Text('Save'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
+  }
+
+  //delete from Database
+  void onDeleteTap(int id) {
+    ref.read(habitNotifierProvider.notifier).deleteHabit(id);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -111,16 +184,6 @@ class _HomePageState extends ConsumerState<HomePage> {
       ),
       body: _buildHabitList(),
     );
-  }
-
-  //Edit Database
-  void onEditTap(int id, String newName) {
-    ref.read(habitNotifierProvider.notifier).updateHabitName(id, newName);
-  }
-
-  //delete from Database
-  void onDeleteTap(int id) {
-    ref.read(habitNotifierProvider.notifier).deleteHabit(id);
   }
 
   Widget? _buildHabitList() {
