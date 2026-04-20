@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habittracker/components/my_drawer.dart';
 import 'package:habittracker/components/my_habit_tile.dart';
+import 'package:habittracker/components/my_heat_map.dart';
 import 'package:habittracker/database/app_database.dart';
 import 'package:habittracker/providers/database_provider.dart';
 import 'package:habittracker/repositories/habit_repository.dart';
@@ -18,6 +20,15 @@ class _HomePageState extends ConsumerState<HomePage> {
   TextEditingController textController = TextEditingController();
   TextEditingController updateTextController = TextEditingController();
   String errorText = '';
+
+  @override
+  void initState() {
+    super.initState();
+    Future.microtask(
+      () => ref.read(habitNotifierProvider.notifier).initFirstLaunchDate(),
+    );
+  }
+
   void createNewHabit() {
     showDialog(
       context: context,
@@ -214,19 +225,31 @@ class _HomePageState extends ConsumerState<HomePage> {
 
       floatingActionButton: FloatingActionButton(
         onPressed: createNewHabit,
+
+        backgroundColor: Theme.of(context).colorScheme.primary,
+        foregroundColor: Theme.of(context).colorScheme.inversePrimary,
         child: Icon(Icons.add),
       ),
-      body: _buildHabitList(),
+      body: ListView(
+        children: [
+          //HEAT MAP
+          _buildHeatMap(),
+          //HABIT LIST
+          _buildHabitList(),
+        ],
+      ),
     );
   }
 
-  Widget? _buildHabitList() {
+  Widget _buildHabitList() {
     //habit database current stored habits
     final habitsAsync = ref.watch(habitNotifierProvider);
 
     return habitsAsync.when(
       data: (habitList) {
         return ListView.builder(
+          shrinkWrap: true,
+          physics: const NeverScrollableScrollPhysics(),
           itemCount: habitList.length,
           itemBuilder: (BuildContext context, int index) {
             //check individual habits
@@ -252,6 +275,38 @@ class _HomePageState extends ConsumerState<HomePage> {
       },
       loading: () =>
           Center(child: const CircularProgressIndicator(color: Colors.blue)),
+    );
+  }
+
+  Widget _buildHeatMap() {
+    //all habits
+    final currentHabits = ref.watch(habitNotifierProvider);
+
+    //first Launched
+    final firstLaunched = ref
+        .watch(habitNotifierProvider.notifier)
+        .getFirstLaunchDate();
+
+    return currentHabits.when(
+      data: (data) {
+        return FutureBuilder(
+          future: firstLaunched,
+          builder: (BuildContext context, AsyncSnapshot snapshot) {
+            if (snapshot.hasData) {
+              return MyHeatMap(
+                startDate: snapshot.data!,
+                datasets: prepHeatMapDataset(data),
+              );
+            } else {
+              return Container();
+            }
+          },
+        );
+      },
+      error: (error, stackTrace) {
+        return Center(child: Text("Error: $error"));
+      },
+      loading: () => Center(child: const CircularProgressIndicator()),
     );
   }
 }
