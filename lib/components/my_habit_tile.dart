@@ -31,7 +31,7 @@ class MyHabitTile extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           color: isCompleted
               ? Colors.green
-              : Theme.of(context).colorScheme.secondary,
+              : Theme.of(context).colorScheme.primary,
         ),
         margin: EdgeInsets.symmetric(vertical: 5, horizontal: 20),
         padding: EdgeInsets.all(15),
@@ -43,7 +43,11 @@ class MyHabitTile extends StatelessWidget {
           ),
           title: Text(
             habit,
-            style: TextStyle(color: isCompleted ? Colors.white : Colors.black),
+            style: TextStyle(
+              color: isCompleted
+                  ? Colors.white
+                  : Theme.of(context).colorScheme.inversePrimary,
+            ),
           ),
           trailing: Builder(
             builder: (context) {
@@ -64,7 +68,9 @@ class MyHabitTile extends StatelessWidget {
                 },
                 icon: Icon(
                   Icons.more_vert,
-                  color: isCompleted ? Colors.white : Colors.black,
+                  color: isCompleted
+                      ? Colors.white
+                      : Theme.of(context).colorScheme.inversePrimary,
                 ),
               );
             },
