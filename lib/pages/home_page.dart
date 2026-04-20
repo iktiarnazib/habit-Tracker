@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habittracker/pages/components/my_drawer.dart';
+import 'package:habittracker/components/my_drawer.dart';
 
 class HomePage extends ConsumerStatefulWidget {
   const HomePage({super.key});
@@ -10,6 +10,31 @@ class HomePage extends ConsumerStatefulWidget {
 }
 
 class _HomePageState extends ConsumerState<HomePage> {
+  void createNewHabit() {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: Text('Add a habit'),
+          content: TextFormField(
+            decoration: InputDecoration(
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+              ),
+              hint: Text('Add a new habit'),
+            ),
+          ),
+          actions: [
+            //cancel button
+            MaterialButton(onPressed: () {}, child: Text('Cancel')),
+            //save button
+            MaterialButton(onPressed: () {}, child: Text('Save')),
+          ],
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -23,8 +48,12 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
         ],
       ),
-      drawer: MyDrawer(),
-      body: Column(),
+      drawer: const MyDrawer(),
+      body: Placeholder(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: createNewHabit,
+        child: Icon(Icons.add),
+      ),
     );
   }
 }
