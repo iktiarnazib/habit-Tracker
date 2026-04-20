@@ -159,8 +159,42 @@ class _HomePageState extends ConsumerState<HomePage> {
   }
 
   //delete from Database
-  void onDeleteTap(int id) {
-    ref.read(habitNotifierProvider.notifier).deleteHabit(id);
+  void onDeleteTap(int id, String name) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return StatefulBuilder(
+          builder: (BuildContext context, setState) {
+            return AlertDialog(
+              title: Text("Do you want to delete \"$name\" habit?"),
+              actions: [
+                //cancel button
+                MaterialButton(
+                  onPressed: () {
+                    //pop the page
+                    Navigator.pop(context);
+                  },
+                  child: const Text('Cancel'),
+                ),
+                //save button
+                MaterialButton(
+                  onPressed: () {
+                    //delete text
+                    ref.read(habitNotifierProvider.notifier).deleteHabit(id);
+                    //pop the page
+                    Navigator.pop(context);
+                  },
+                  child: const Text(
+                    'Delete',
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+              ],
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -208,7 +242,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               isCompleted: isCompletedToday,
               onChanged: (value) => onCompletedChanged(value, habit),
               onEditTap: () => onEditTap(habit.id, habit.name),
-              onDeleteTap: () => onDeleteTap(habit.id),
+              onDeleteTap: () => onDeleteTap(habit.id, habit.name),
             );
           },
         );
@@ -216,7 +250,8 @@ class _HomePageState extends ConsumerState<HomePage> {
       error: (error, stackTrace) {
         return Center(child: Text("Error: $error"));
       },
-      loading: () => const CircularProgressIndicator(),
+      loading: () =>
+          Center(child: const CircularProgressIndicator(color: Colors.blue)),
     );
   }
 }
