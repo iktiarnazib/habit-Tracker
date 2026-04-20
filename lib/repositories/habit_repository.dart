@@ -21,11 +21,7 @@ class HabitNotifier extends AsyncNotifier<List<Habit>> {
       await db
           .into(db.appSettings)
           .insert(
-            AppSettingsCompanion.insert(
-              firstLaunchDate: Value(
-                DateTime.now(),
-              ), // ✅ no ! and wrapped in Value()
-            ),
+            AppSettingsCompanion.insert(firstLaunchDate: Value(DateTime.now())),
           );
     }
   }
