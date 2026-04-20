@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habittracker/components/my_drawer.dart';
 import 'package:habittracker/components/my_habit_tile.dart';
+import 'package:habittracker/components/my_heat_map.dart';
 import 'package:habittracker/database/app_database.dart';
 import 'package:habittracker/providers/database_provider.dart';
 import 'package:habittracker/repositories/habit_repository.dart';
@@ -216,7 +217,14 @@ class _HomePageState extends ConsumerState<HomePage> {
         onPressed: createNewHabit,
         child: Icon(Icons.add),
       ),
-      body: _buildHabitList(),
+      body: ListView(
+        children: [
+          //HEAT MAP
+          _buildHeatMap()!,
+          //HABIT LIST
+          _buildHabitList()!,
+        ],
+      ),
     );
   }
 
@@ -253,5 +261,21 @@ class _HomePageState extends ConsumerState<HomePage> {
       loading: () =>
           Center(child: const CircularProgressIndicator(color: Colors.blue)),
     );
+  }
+
+  Widget? _buildHeatMap() {
+    //all habits
+    final currentHabits = ref.watch(habitNotifierProvider);
+
+    currentHabits.when(data: (data) {
+      return FutureBuilder(
+        future: Future,
+        builder: (BuildContext context, AsyncSnapshot snapshot) {
+          return ;
+        },
+      ),
+    }, error: (error, stackTrace) {
+      return Center(child: Text("Error: $error"),);
+    }, loading: () => Center(child: const CircularProgressIndicator(),),);
   }
 }

@@ -41,6 +41,7 @@ dependencies:
   drift_flutter: ^0.2.7
   path_provider: ^2.1.5
   popover: ^0.4.0
+  flutter_heatmap_calendar: ^1.0.5
 
 dev_dependencies:
   flutter_test:
