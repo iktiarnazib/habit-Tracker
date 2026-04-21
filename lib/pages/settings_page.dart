@@ -34,7 +34,11 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
       appBar: AppBar(
         title: Text(
           'Settings',
-          style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
+          style: TextStyle(
+            fontFamily: "DMSerifTexts",
+            fontSize: 25,
+            color: Theme.of(context).colorScheme.inversePrimary,
+          ),
         ),
         backgroundColor: Colors.transparent,
         elevation: 0,
@@ -49,7 +53,7 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
               color: Theme.of(context).colorScheme.primary,
             ),
             child: ListTile(
-              title: const Text('Dark Mode'),
+              title: const Text('Dark Mode', style: TextStyle(fontSize: 16)),
               trailing: Switch(
                 value: darkModeOn,
                 onChanged: (value) {

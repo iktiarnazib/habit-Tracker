@@ -57,6 +57,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                     Navigator.pop(context);
                     //clear the text
                     textController.clear();
+                    //error text reset
+                    errorText = '';
                   },
                   child: const Text('Cancel'),
                 ),
@@ -209,6 +211,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         actions: [
           IconButton(
             onPressed: () {
@@ -231,6 +234,19 @@ class _HomePageState extends ConsumerState<HomePage> {
           //HEAT MAP
           _buildHeatMap(),
 
+          //title text
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 30),
+            child: Text(
+              'Habits',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 35,
+                fontFamily: "DMSerifTexts",
+                fontStyle: FontStyle.normal,
+              ),
+            ),
+          ),
           //HABIT LIST
           _buildHabitList(),
         ],
@@ -245,6 +261,17 @@ class _HomePageState extends ConsumerState<HomePage> {
 
     return habitsAsync.when(
       data: (habitList) {
+        if (habitList.isEmpty) {
+          return SizedBox(
+            height: 300,
+            child: Center(
+              child: Text(
+                'Please add a habit',
+                style: TextStyle(fontFamily: "DMSerifTexts"),
+              ),
+            ),
+          );
+        }
         return ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -257,7 +284,6 @@ class _HomePageState extends ConsumerState<HomePage> {
             bool isCompletedToday = isTheHabitCompletedToday(
               habit.completedDays,
             );
-
             return MyHabitTile(
               habit: habit.name,
               isCompleted: isCompletedToday,
