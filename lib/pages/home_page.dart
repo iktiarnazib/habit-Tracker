@@ -240,6 +240,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             child: Text(
               'Habits',
               style: TextStyle(
+                color: Theme.of(context).colorScheme.inversePrimary,
                 fontWeight: FontWeight.bold,
                 fontSize: 35,
                 fontFamily: "DMSerifTexts",
@@ -267,7 +268,10 @@ class _HomePageState extends ConsumerState<HomePage> {
             child: Center(
               child: Text(
                 'Please add a habit',
-                style: TextStyle(fontFamily: "DMSerifTexts"),
+                style: TextStyle(
+                  fontFamily: "DMSerifTexts",
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
               ),
             ),
           );
