@@ -89,7 +89,10 @@ class _HomePageState extends ConsumerState<HomePage> {
                       setState(() {});
                     }
                   },
-                  child: const Text('Save'),
+                  child: const Text(
+                    'Save',
+                    style: TextStyle(color: Color.fromARGB(255, 46, 125, 50)),
+                  ),
                 ),
               ],
             );
@@ -237,7 +240,7 @@ class _HomePageState extends ConsumerState<HomePage> {
           onPressed: createNewHabit,
           backgroundColor: Theme.of(context).colorScheme.primary,
           foregroundColor: Theme.of(context).colorScheme.inversePrimary,
-          child: Icon(Icons.add),
+          child: Icon(Icons.add, color: Colors.green),
         ),
       ),
       body: ListView(
