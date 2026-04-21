@@ -46,7 +46,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                       hint: Text('Add a new habit'),
                     ),
                   ),
-                  Text(errorText, style: TextStyle(color: Colors.red)),
+                  if (errorText.isNotEmpty)
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 4),
+                        Text(errorText, style: TextStyle(color: Colors.red)),
+                      ],
+                    ),
                 ],
               ),
               actions: [
