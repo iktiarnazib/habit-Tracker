@@ -224,12 +224,14 @@ class _HomePageState extends ConsumerState<HomePage> {
         centerTitle: true,
       ),
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: createNewHabit,
-
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Theme.of(context).colorScheme.inversePrimary,
-        child: Icon(Icons.add),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: FloatingActionButton(
+          onPressed: createNewHabit,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          foregroundColor: Theme.of(context).colorScheme.inversePrimary,
+          child: Icon(Icons.add),
+        ),
       ),
       body: ListView(
         children: [
