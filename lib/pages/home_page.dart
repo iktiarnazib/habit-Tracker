@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habittracker/components/my_drawer.dart';
 import 'package:habittracker/components/my_habit_tile.dart';
 import 'package:habittracker/components/my_heat_map.dart';
 import 'package:habittracker/database/app_database.dart';
-import 'package:habittracker/providers/database_provider.dart';
 import 'package:habittracker/repositories/habit_repository.dart';
 import 'package:habittracker/util/habit_util.dart';
 
@@ -221,7 +218,6 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
         ],
       ),
-      drawer: const MyDrawer(),
 
       floatingActionButton: FloatingActionButton(
         onPressed: createNewHabit,
@@ -234,6 +230,7 @@ class _HomePageState extends ConsumerState<HomePage> {
         children: [
           //HEAT MAP
           _buildHeatMap(),
+
           //HABIT LIST
           _buildHabitList(),
         ],
@@ -241,6 +238,7 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
+  //Habits list
   Widget _buildHabitList() {
     //habit database current stored habits
     final habitsAsync = ref.watch(habitNotifierProvider);
