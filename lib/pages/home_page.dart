@@ -46,7 +46,14 @@ class _HomePageState extends ConsumerState<HomePage> {
                       hint: Text('Add a new habit'),
                     ),
                   ),
-                  Text(errorText, style: TextStyle(color: Colors.red)),
+                  if (errorText.isNotEmpty)
+                    Column(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        SizedBox(height: 4),
+                        Text(errorText, style: TextStyle(color: Colors.red)),
+                      ],
+                    ),
                 ],
               ),
               actions: [
@@ -211,6 +218,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text('Habit Tracker', style: TextStyle(fontSize: 25)),
         backgroundColor: Colors.transparent,
         actions: [
           IconButton(
@@ -220,26 +228,32 @@ class _HomePageState extends ConsumerState<HomePage> {
             icon: Icon(Icons.settings),
           ),
         ],
+        centerTitle: true,
       ),
 
-      floatingActionButton: FloatingActionButton(
-        onPressed: createNewHabit,
-
-        backgroundColor: Theme.of(context).colorScheme.primary,
-        foregroundColor: Theme.of(context).colorScheme.inversePrimary,
-        child: Icon(Icons.add),
+      floatingActionButton: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+        child: FloatingActionButton(
+          onPressed: createNewHabit,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          foregroundColor: Theme.of(context).colorScheme.inversePrimary,
+          child: Icon(Icons.add),
+        ),
       ),
       body: ListView(
         children: [
+          SizedBox(height: 15),
           //HEAT MAP
           _buildHeatMap(),
-
+          //space
+          SizedBox(height: 10),
           //title text
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 30),
             child: Text(
               'Habits',
               style: TextStyle(
+                color: Theme.of(context).colorScheme.inversePrimary,
                 fontWeight: FontWeight.bold,
                 fontSize: 35,
                 fontFamily: "DMSerifTexts",
@@ -247,6 +261,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ),
           ),
+
           //HABIT LIST
           _buildHabitList(),
         ],
@@ -267,7 +282,9 @@ class _HomePageState extends ConsumerState<HomePage> {
             child: Center(
               child: Text(
                 'Please add a habit',
-                style: TextStyle(fontFamily: "DMSerifTexts"),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.inversePrimary,
+                ),
               ),
             ),
           );
@@ -317,9 +334,12 @@ class _HomePageState extends ConsumerState<HomePage> {
           future: firstLaunched,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
-              return MyHeatMap(
-                startDate: snapshot.data!,
-                datasets: prepHeatMapDataset(data),
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: MonthlyHeatMap(
+                  datasets: prepHeatMapDataset(data),
+                  month: DateTime.now(),
+                ),
               );
             } else {
               return Container();
@@ -334,3 +354,5 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 }
+
+//Habit Tracker app done.
