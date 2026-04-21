@@ -211,6 +211,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        title: Text('Habit Tracker', style: TextStyle(fontSize: 25)),
         backgroundColor: Colors.transparent,
         actions: [
           IconButton(
@@ -220,6 +221,7 @@ class _HomePageState extends ConsumerState<HomePage> {
             icon: Icon(Icons.settings),
           ),
         ],
+        centerTitle: true,
       ),
 
       floatingActionButton: FloatingActionButton(
@@ -231,9 +233,11 @@ class _HomePageState extends ConsumerState<HomePage> {
       ),
       body: ListView(
         children: [
+          SizedBox(height: 15),
           //HEAT MAP
           _buildHeatMap(),
-
+          //space
+          SizedBox(height: 10),
           //title text
           Padding(
             padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 30),
@@ -248,6 +252,7 @@ class _HomePageState extends ConsumerState<HomePage> {
               ),
             ),
           ),
+
           //HABIT LIST
           _buildHabitList(),
         ],
@@ -321,9 +326,12 @@ class _HomePageState extends ConsumerState<HomePage> {
           future: firstLaunched,
           builder: (BuildContext context, AsyncSnapshot snapshot) {
             if (snapshot.hasData) {
-              return MyHeatMap(
-                startDate: snapshot.data!,
-                datasets: prepHeatMapDataset(data),
+              return Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15.0),
+                child: MonthlyHeatMap(
+                  datasets: prepHeatMapDataset(data),
+                  month: DateTime.now(),
+                ),
               );
             } else {
               return Container();
@@ -338,3 +346,5 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 }
+
+//Habit Tracker app done.

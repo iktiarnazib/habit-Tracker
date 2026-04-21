@@ -35,7 +35,6 @@ class _SettingsPageState extends ConsumerState<SettingsPage> {
         title: Text(
           'Settings',
           style: TextStyle(
-            fontFamily: "DMSerifTexts",
             fontSize: 25,
             color: Theme.of(context).colorScheme.inversePrimary,
           ),
