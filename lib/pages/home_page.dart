@@ -274,7 +274,6 @@ class _HomePageState extends ConsumerState<HomePage> {
               child: Text(
                 'Please add a habit',
                 style: TextStyle(
-                  fontFamily: "DMSerifTexts",
                   color: Theme.of(context).colorScheme.inversePrimary,
                 ),
               ),
