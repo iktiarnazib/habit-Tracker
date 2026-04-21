@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habittracker/components/my_drawer.dart';
 import 'package:habittracker/components/my_habit_tile.dart';
 import 'package:habittracker/components/my_heat_map.dart';
 import 'package:habittracker/database/app_database.dart';
-import 'package:habittracker/providers/database_provider.dart';
 import 'package:habittracker/repositories/habit_repository.dart';
 import 'package:habittracker/util/habit_util.dart';
 
@@ -60,6 +57,8 @@ class _HomePageState extends ConsumerState<HomePage> {
                     Navigator.pop(context);
                     //clear the text
                     textController.clear();
+                    //error text reset
+                    errorText = '';
                   },
                   child: const Text('Cancel'),
                 ),
@@ -212,6 +211,7 @@ class _HomePageState extends ConsumerState<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Colors.transparent,
         actions: [
           IconButton(
             onPressed: () {
@@ -221,7 +221,6 @@ class _HomePageState extends ConsumerState<HomePage> {
           ),
         ],
       ),
-      drawer: const MyDrawer(),
 
       floatingActionButton: FloatingActionButton(
         onPressed: createNewHabit,
@@ -234,6 +233,20 @@ class _HomePageState extends ConsumerState<HomePage> {
         children: [
           //HEAT MAP
           _buildHeatMap(),
+
+          //title text
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 2.0, horizontal: 30),
+            child: Text(
+              'Habits',
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                fontSize: 35,
+                fontFamily: "DMSerifTexts",
+                fontStyle: FontStyle.normal,
+              ),
+            ),
+          ),
           //HABIT LIST
           _buildHabitList(),
         ],
@@ -241,12 +254,24 @@ class _HomePageState extends ConsumerState<HomePage> {
     );
   }
 
+  //Habits list
   Widget _buildHabitList() {
     //habit database current stored habits
     final habitsAsync = ref.watch(habitNotifierProvider);
 
     return habitsAsync.when(
       data: (habitList) {
+        if (habitList.isEmpty) {
+          return SizedBox(
+            height: 300,
+            child: Center(
+              child: Text(
+                'Please add a habit',
+                style: TextStyle(fontFamily: "DMSerifTexts"),
+              ),
+            ),
+          );
+        }
         return ListView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
@@ -259,7 +284,6 @@ class _HomePageState extends ConsumerState<HomePage> {
             bool isCompletedToday = isTheHabitCompletedToday(
               habit.completedDays,
             );
-
             return MyHabitTile(
               habit: habit.name,
               isCompleted: isCompletedToday,

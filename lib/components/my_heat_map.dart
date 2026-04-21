@@ -1,24 +1,32 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_heatmap_calendar/flutter_heatmap_calendar.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habittracker/theme/dark_mode.dart';
+import 'package:habittracker/theme/theme_provider.dart';
 
-class MyHeatMap extends StatelessWidget {
+class MyHeatMap extends ConsumerWidget {
   final DateTime startDate;
   final Map<DateTime, int> datasets;
   const MyHeatMap({super.key, required this.startDate, required this.datasets});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    //theme riverpod
+    final themeMode = ref.read(themeProvider);
+
+    final mode = darkMode == themeMode;
+
     return HeatMap(
       startDate: startDate,
       endDate: DateTime.now(),
       datasets: datasets,
       colorMode: ColorMode.color,
       defaultColor: Theme.of(context).colorScheme.primary,
-      textColor: Colors.white,
+      textColor: mode ? Colors.white : Colors.black,
       showColorTip: false,
       showText: true,
       scrollable: true,
-      size: 30,
+      size: 40,
       colorsets: {
         1: Colors.green.shade200,
         2: Colors.green.shade300,
